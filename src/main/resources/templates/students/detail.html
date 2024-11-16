@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Detalle de Estudiante')}"></head>
+<body>
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/navbar :: sidebar}"></div>
+
+    <!-- Main content -->
+    <div class="w-100">
+        <th:block th:if="${message}">
+            <div th:replace="~{fragments/toast :: toast(message=${message},type=${type})}"></div>
+        </th:block>
+
+        <div class="container py-4">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h2>Detalle del Estudiante</h2>
+                <div>
+                    <a th:href="@{/students/{id}/edit(id=${student.id})}" class="btn btn-primary me-2">
+                        <i class="bi bi-pencil"></i> Editar Información
+                    </a>
+                    <a th:href="@{/enrollment/{id}(id=${student.id})}" class="btn btn-success">
+                        <i class="bi bi-plus-circle"></i> Inscribir Asignatura
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Student Details Card -->
+                <div class="col-md-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Información Personal</h5>
+                            <div class="mb-3">
+                                <label class="fw-bold">RUT:</label>
+                                <p th:text="${student.rut}" class="mb-0"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="fw-bold">Nombre:</label>
+                                <p th:text="${student.name}" class="mb-0"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="fw-bold">Dirección:</label>
+                                <p th:text="${student.address}" class="mb-0"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subjects Card -->
+                <div class="col-md-7">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Asignaturas Inscritas</h5>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="subject : ${student.subjects}">
+                                        <td th:text="${subject.id}"></td>
+                                        <td th:text="${subject.name}"></td>
+                                        <td>
+                                            <form th:action="@{|/enrollment/${student.id}/${subject.id}|}"
+                                                  method="post"
+                                                  style="display: inline;">
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${student.subjects.empty}">
+                                        <td colspan="4" class="text-center">No hay asignaturas inscritas</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/common :: scripts}"></div>
+</body>
+</html>

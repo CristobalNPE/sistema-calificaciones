@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Error')}"></head>
+<body class="bg-light">
+<div class="min-vh-100 d-flex align-items-center">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body p-5">
+                        <!-- Error Icon -->
+                        <div class="text-center mb-4">
+                            <i class="bi bi-exclamation-circle-fill text-danger" style="font-size: 5rem;"></i>
+                        </div>
+
+                        <!-- Main Error Message -->
+                        <div th:if="${message}"
+                             th:class="|alert alert-${type} border-0 shadow-sm|"
+                             role="alert">
+                            <h4 class="alert-heading text-center mb-3">
+                                <span th:text="${message}">Error Message</span>
+                            </h4>
+                            <div th:if="${errorCode}"
+                                 class="text-center text-muted">
+                                <small>Error Code: <span th:text="${errorCode}"></span></small>
+                            </div>
+                        </div>
+
+                        <!-- Back Button -->
+                        <div class="text-center mt-4">
+                            <a href="javascript:history.back()"
+                               class="btn btn-primary btn-lg px-5 shadow-sm">
+                                <i class="bi bi-arrow-left me-2"></i>Volver
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/common :: scripts}"></div>
+</body>
+</html>

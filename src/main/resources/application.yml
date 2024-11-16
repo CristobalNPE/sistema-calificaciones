@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: m6final-sc
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  docker:
+    compose:
+      lifecycle-management: start_only
+
+# App
+app:
+  error:
+    base-uri: https://api.domainplaceholder.com/errors/
+  jwt:
+    secret: IMH5rsuPy75x9jvk8ZAIBI7dsNuYpehNshgqTCdMoTs= # Very secret key
+#logging:
+#  level:
+#    root: info

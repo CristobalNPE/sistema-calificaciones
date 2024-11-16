@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Gestión de Estudiantes')}"></head>
+<body>
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/navbar :: sidebar}"></div>
+
+    <!-- Main content -->
+    <div class=" w-100">
+
+        <th:block th:if="${message}">
+            <div th:replace="~{fragments/toast :: toast(message=${message},type=${type})}"></div>
+        </th:block>
+        <div class="container py-4">
+
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <h2 class="mb-4">Directorio de Estudiantes</h2>
+                <a th:href="@{/students/new}" class="btn btn-success">
+                    <i class="bi bi-plus-circle"></i> Registrar Estudiante
+                </a>
+            </div>
+
+            <!-- Formulario de Búsqueda -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form th:action="@{/students}" method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">RUT</label>
+                            <input type="text" class="form-control" name="rut" th:value="${param.rut}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" class="form-control" name="name" th:value="${param.name}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Dirección</label>
+                            <input type="text" class="form-control" name="address" th:value="${param.address}">
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-success">Buscar</button>
+                            <a th:href="@{/students}" class="btn btn-secondary">Limpiar</a>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- Tabla de Resultados -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>RUT</th>
+                                <th>Nombre</th>
+                                <th>Dirección</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="student : ${students}">
+                                <td th:text="${student.rut}"></td>
+                                <td th:text="${student.name}"></td>
+                                <td th:text="${student.address}"></td>
+                                <td>
+                                    <a th:href="@{/students/{id}(id=${student.id})}"
+                                       class="btn btn-sm btn-secondary">
+                                        <i class="bi bi-eye "></i></a>
+                                </td>
+                            </tr>
+                            <tr th:if="${students.empty}">
+                                <td colspan="4" class="text-center">No se encontraron estudiantes</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Paginación -->
+                    <div th:replace="~{fragments/pagination :: pagination(${students}, '/students')}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/common :: scripts}"></div>
+</body>
+</html>

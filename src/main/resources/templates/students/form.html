@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Gestión de Estudiantes')}"></head>
+<body>
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/navbar :: sidebar}"></div>
+
+    <!-- Main content -->
+    <div class="w-100">
+        <div class="container py-4">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h2 th:text="${isNewStudent ? 'Registrar Estudiante' : 'Editar Estudiante'}"></h2>
+                <a th:href="@{/students}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <form th:action="@{${isNewStudent ? '/students' : '/students/' + studentId}}"
+                          th:object="${student}"
+                          method="post"
+                          class="row g-3">
+                        <div class="col-md-4">
+                            <label for="rut" class="form-label">RUT</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="rut"
+                                   th:field="*{rut}"
+                                   th:classappend="${#fields.hasErrors('rut')} ? 'is-invalid' : ''">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('rut')}"
+                                 th:errors="*{rut}">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="name" class="form-label">Nombre</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="name"
+                                   th:field="*{name}"
+                                   th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}"
+                                 th:errors="*{name}">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="address" class="form-label">Dirección</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="address"
+                                   th:field="*{address}"
+                                   th:classappend="${#fields.hasErrors('address')} ? 'is-invalid' : ''">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('address')}"
+                                 th:errors="*{address}">
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-save"></i> Guardar
+                            </button>
+                            <a th:href="@{/students}" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/common :: scripts}"></div>
+</body>
+</html>

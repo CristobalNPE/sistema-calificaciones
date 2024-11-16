@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Inscripción de Asignaturas')}"></head>
+<body>
+<div class="d-flex">
+    <div th:replace="~{fragments/navbar :: sidebar}"></div>
+
+    <div class="w-100">
+        <th:block th:if="${message}">
+            <div th:replace="~{fragments/toast :: toast(message=${message},type=${type})}"></div>
+        </th:block>
+
+        <div class="container py-4">
+            <h2 class="mb-4">Inscripción de Asignaturas</h2>
+
+            <div class="card">
+                <div class="card-body">
+                    <form th:action="@{/enrollment/{studentId}(studentId=${studentId})}" method="post">
+                        <h5 class="mb-3">Asignaturas Disponibles</h5>
+                        <div class="row g-3">
+                            <div th:each="subject, iterStat : ${subjects}" class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox"
+                                                   th:value="${subject.id}"
+                                                   th:id="'subject-' + ${subject.id}"
+                                                   name="targetSubjectIds">
+                                            <label class="form-check-label w-100"
+                                                   th:for="'subject-' + ${subject.id}">
+                                                <span th:text="${subject.name}" class="fw-bold d-block"></span>
+                                                <small class="text-muted">
+                                                    <i class="bi bi-people"></i>
+                                                    <span th:text="${subject.registeredStudents}"></span> estudiantes
+                                                </small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i> Confirmar Inscripción
+                            </button>
+                            <a th:href="@{/students}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/common :: scripts}"></div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Detalle de Asignatura')}"></head>
+<body>
+<div class="d-flex">
+    <div th:replace="~{fragments/navbar :: sidebar}"></div>
+
+    <div class="w-100">
+        <th:block th:if="${message}">
+            <div th:replace="~{fragments/toast :: toast(message=${message},type=${type})}"></div>
+        </th:block>
+
+        <div class="container py-4">
+            <div class="mb-4">
+                <a th:href="@{/subjects}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </a>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h2 class="card-title mb-4" th:text="${subject.name}"></h2>
+                            <div class="py-4">
+                                <span class="display-4 fw-bold text-primary"
+                                      th:text="${subject.registeredStudents}"></span>
+                                <p class="text-muted">Estudiantes Registrados</p>
+                            </div>
+                            <button class="btn btn-success w-100 mb-2">
+                                <i class="bi bi-plus-circle"></i> Agregar Estudiante
+                            </button>
+                            <form th:action="@{/subjects/{id}/delete(id=${subject.id})}" method="post" class="mt-2">
+                                <button type="submit" class="btn btn-danger w-100"
+                                        onclick="return confirm('¿Está seguro de eliminar esta asignatura?')">
+                                    <i class="bi bi-trash"></i> Eliminar Asignatura
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title mb-0">Estudiantes Inscritos</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>RUT</th>
+                                        <th>Nombre</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="student : ${registeredStudents}">
+                                        <td th:text="${student.rut}"></td>
+                                        <td th:text="${student.name}"></td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a th:href="@{/students/{id}(id=${student.id})}"
+                                                   class="btn btn-sm btn-secondary">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+
+                                                <form th:action="@{|/enrollment/${student.id}/${subject.id}|}"
+                                                      method="post"
+                                                      style="display: inline;">
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${registeredStudents.empty}">
+                                        <td colspan="3" class="text-center">
+                                            No hay estudiantes inscritos
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div th:replace="~{fragments/pagination :: pagination(${registeredStudents},
+                                 @{/subjects/{id}(id=${subject.id})})}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/common :: scripts}"></div>
+
+
+</body>
+</html>

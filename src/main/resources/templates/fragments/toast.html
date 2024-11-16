@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="toast(message, type)"
+     class="position-fixed top-0 start-50 translate-middle-x p-3"
+     style="z-index: 1050; margin-left: 140px;">
+    <div th:class="|alert alert-${type} alert-dismissible fade show shadow-sm|"
+         role="alert"
+         style="min-width: 300px;">
+        <!-- Success -->
+        <i class="bi bi-check-circle me-2" th:if="${type == 'success'}"></i>
+        <!-- Danger -->
+        <i class="bi bi-exclamation-circle me-2" th:if="${type == 'danger'}"></i>
+        <!-- Warning -->
+        <i class="bi bi-exclamation-triangle me-2" th:if="${type == 'warning'}"></i>
+        <!-- Info -->
+        <i class="bi bi-info-circle me-2" th:if="${type == 'info'}"></i>
+
+        <span th:text="${message}"></span>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"></button>
+    </div>
+</div>
+</body>
+</html>
+
+
+
+
+<!--&lt;!&ndash; Success toast &ndash;&gt;-->
+<!--<div th:replace="~{fragments/toast :: toast(-->
+<!--    message='Operación exitosa',-->
+<!--    type='success'-->
+<!--)}"></div>-->
+
+<!--&lt;!&ndash; Error toast &ndash;&gt;-->
+<!--<div th:replace="~{fragments/toast :: toast(-->
+<!--    message='Error al procesar la solicitud',-->
+<!--    type='danger'-->
+<!--)}"></div>-->
+
+<!--&lt;!&ndash; Warning toast &ndash;&gt;-->
+<!--<div th:replace="~{fragments/toast :: toast(-->
+<!--    message='Advertencia: datos incompletos',-->
+<!--    type='warning'-->
+<!--)}"></div>-->
+
+<!--&lt;!&ndash; Info toast &ndash;&gt;-->
+<!--<div th:replace="~{fragments/toast :: toast(-->
+<!--    message='Información importante',-->
+<!--    type='info'-->
+<!--)}"></div>-->
