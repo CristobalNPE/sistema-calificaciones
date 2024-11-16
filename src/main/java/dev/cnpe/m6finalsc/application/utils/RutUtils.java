@@ -4,14 +4,13 @@ public class RutUtils {
 
     public static String formatRut(String rut) {
 
-        if (rut == null || rut.isBlank()) {
+        String cleanedRut = cleanRut(rut);
+        if (cleanedRut.isEmpty()) {
             return "";
         }
 
-        rut = rut.replace(".", "").replace("-", "").trim();
-
-        String number = rut.substring(0, rut.length() - 1);
-        String dv = rut.substring(rut.length() - 1);
+        String number = cleanedRut.substring(0, cleanedRut.length() - 1);
+        String dv = cleanedRut.substring(cleanedRut.length() - 1);
 
         StringBuilder formatted = new StringBuilder();
         for (int i = number.length() - 1, count = 0; i >= 0; i--, count++) {
@@ -29,11 +28,10 @@ public class RutUtils {
         if (rut == null || rut.isBlank()) {
             return "";
         }
-        String cleanRut = rut.replace(".", "")
-                             .replace("-", "")
-                             .trim();
 
-        return cleanRut;
+        return rut.replace(".", "")
+                  .replace("-", "")
+                  .trim();
     }
 
 }
