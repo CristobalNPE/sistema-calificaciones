@@ -6,7 +6,7 @@ import dev.cnpe.m6finalsc.application.dto.student.StudentSearchCriteria;
 import dev.cnpe.m6finalsc.application.mapper.StudentMapper;
 import dev.cnpe.m6finalsc.domain.DomainException;
 import dev.cnpe.m6finalsc.domain.model.Student;
-import dev.cnpe.m6finalsc.domain.repo.StudentRepository;
+import dev.cnpe.m6finalsc.infrastructure.repo.StudentRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;

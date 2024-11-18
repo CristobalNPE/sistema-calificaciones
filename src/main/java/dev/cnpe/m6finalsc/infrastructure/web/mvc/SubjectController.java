@@ -1,4 +1,4 @@
-package dev.cnpe.m6finalsc.application.web.controller.mvc;
+package dev.cnpe.m6finalsc.infrastructure.web.mvc;
 
 import dev.cnpe.m6finalsc.application.dto.subject.SubjectRequest;
 import dev.cnpe.m6finalsc.application.service.SubjectService;

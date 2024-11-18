@@ -1,7 +1,7 @@
 package dev.cnpe.m6finalsc.application.service;
 
-import dev.cnpe.m6finalsc.application.web.security.SecurityUser;
-import dev.cnpe.m6finalsc.domain.repo.UserRepository;
+import dev.cnpe.m6finalsc.application.security.SecurityUser;
+import dev.cnpe.m6finalsc.infrastructure.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

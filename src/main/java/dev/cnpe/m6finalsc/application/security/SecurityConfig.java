@@ -1,4 +1,4 @@
-package dev.cnpe.m6finalsc.application.web.security;
+package dev.cnpe.m6finalsc.application.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

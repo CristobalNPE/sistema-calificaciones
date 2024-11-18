@@ -1,4 +1,4 @@
-package dev.cnpe.m6finalsc.application.service;
+package dev.cnpe.m6finalsc.application.security;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;

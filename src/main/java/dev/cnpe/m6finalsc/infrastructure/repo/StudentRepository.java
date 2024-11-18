@@ -1,4 +1,4 @@
-package dev.cnpe.m6finalsc.domain.repo;
+package dev.cnpe.m6finalsc.infrastructure.repo;
 
 import dev.cnpe.m6finalsc.application.dto.student.StudentSummary;
 import dev.cnpe.m6finalsc.domain.model.Student;

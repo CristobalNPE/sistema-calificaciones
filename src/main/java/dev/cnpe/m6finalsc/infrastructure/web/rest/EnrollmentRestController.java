@@ -1,4 +1,4 @@
-package dev.cnpe.m6finalsc.application.web.controller.rest;
+package dev.cnpe.m6finalsc.infrastructure.web.rest;
 
 import dev.cnpe.m6finalsc.application.dto.enrollment.EnrollmentResult;
 import dev.cnpe.m6finalsc.application.service.EnrollmentService;

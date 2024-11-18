@@ -1,4 +1,4 @@
-package dev.cnpe.m6finalsc.application.web.security;
+package dev.cnpe.m6finalsc.application.security;
 
 import dev.cnpe.m6finalsc.domain.model.User;
 import lombok.Getter;

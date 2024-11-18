@@ -1,4 +1,4 @@
-package dev.cnpe.m6finalsc.application.web.controller.mvc;
+package dev.cnpe.m6finalsc.infrastructure.web.mvc;
 
 import dev.cnpe.m6finalsc.application.dto.enrollment.EnrollmentResult;
 import dev.cnpe.m6finalsc.application.dto.subject.SubjectResponse;

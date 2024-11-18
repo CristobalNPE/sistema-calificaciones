@@ -1,4 +1,4 @@
-package dev.cnpe.m6finalsc.application.service;
+package dev.cnpe.m6finalsc.application.security;
 
 
 import io.jsonwebtoken.Claims;

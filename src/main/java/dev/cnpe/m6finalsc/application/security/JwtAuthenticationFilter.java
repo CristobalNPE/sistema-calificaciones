@@ -1,6 +1,5 @@
-package dev.cnpe.m6finalsc.application.web.security;
+package dev.cnpe.m6finalsc.application.security;
 
-import dev.cnpe.m6finalsc.application.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
