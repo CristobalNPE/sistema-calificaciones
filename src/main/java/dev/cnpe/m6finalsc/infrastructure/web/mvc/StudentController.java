@@ -4,6 +4,7 @@ import dev.cnpe.m6finalsc.application.dto.student.StudentRequest;
 import dev.cnpe.m6finalsc.application.dto.student.StudentResponse;
 import dev.cnpe.m6finalsc.application.dto.student.StudentSearchCriteria;
 import dev.cnpe.m6finalsc.application.service.StudentService;
+import dev.cnpe.m6finalsc.domain.model.Student;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -53,10 +54,10 @@ public class StudentController {
             return "students/form";
         }
 
-        studentService.create(form);
+        Student createdStudent = studentService.create(form);
         redirectAttributes.addFlashAttribute("message", "Estudiante registrado exitosamente");
         redirectAttributes.addFlashAttribute("type", "success");
-        return "redirect:/students";
+        return "redirect:/students/" + createdStudent.getId();
     }
 
 
@@ -98,7 +99,7 @@ public class StudentController {
         studentService.update(id, form);
         redirectAttributes.addFlashAttribute("message", "Estudiante actualizado exitosamente");
         redirectAttributes.addFlashAttribute("type", "success");
-        return "redirect:/students";
+        return "redirect:/students/" + id;
     }
 
 }
