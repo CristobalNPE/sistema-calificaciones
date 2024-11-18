@@ -14,10 +14,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.IntStream;
 
 @Slf4j
@@ -26,8 +23,18 @@ import java.util.stream.IntStream;
 public class SampleDataLoader implements CommandLineRunner {
 
 
-    public static final int FAKE_STUDENTS_AMOUNT = 300;
+    public static final int FAKE_STUDENTS_AMOUNT = 1000;
     public static final int MAX_SUBJECTS_ENROLLED_PER_STUDENT = 5;
+    private static final List<String> EXAMPLE_SUBJECTS = List.of(
+            "Cálculo Diferencial",
+            "Álgebra Lineal",
+            "Física General",
+            "Programación II",
+            "Estructuras de Datos",
+            "Desarrollo Web"
+    );
+    private static final String ADMIN_USERNAME = "admin";
+    private static final String ADMIN_PASSWORD = "admin";
 
     private final StudentRepository studentRepo;
     private final SubjectRepository subjectRepo;
@@ -38,89 +45,91 @@ public class SampleDataLoader implements CommandLineRunner {
     private final Faker faker;
 
     @Override
-    public void run(String... args) throws Exception {
-
-        long start = System.currentTimeMillis();
-        seedData();
-        long end = System.currentTimeMillis();
-
-        log.info("🎉🎉🎉🎉🎉 Datos de muestra cargados en {} segundos 🎉🎉🎉🎉🎉", (end - start) / 1000.0);
-
+    public void run(String... args) {
+        try {
+            long start = System.currentTimeMillis();
+            seedData();
+            logExecutionTime(start);
+        } catch (Exception e) {
+            log.error("Error al iniciar cargar datos de muestra: ", e);
+            throw new RuntimeException("Error al iniciar cargar datos de muestra: ", e);
+        }
     }
 
     private void seedData() {
-        loadExampleSubjects();
-        loadStudentsDumyData(FAKE_STUDENTS_AMOUNT);
-
-        List<Student> savedStudents = studentRepo.findAll();
-        List<Subject> savedSubjects = subjectRepo.findAll();
-
-        enrollStudentsInRandomSubjects(savedStudents, savedSubjects);
-
+        List<Subject> subjects = loadExampleSubjects();
+        List<Student> students = loadStudentsDummyData(FAKE_STUDENTS_AMOUNT);
+        enrollStudentsInRandomSubjects(students, subjects);
         registerTestAdmin();
     }
 
-    private void loadExampleSubjects() {
-        List<String> exampleSubjectsNames = List.of(
-                "Cálculo Diferencial",
-                "Álgebra Lineal",
-                "Física General",
-                "Programación II",
-                "Estructuras de Datos",
-                "Desarrollo Web"
-        );
+    private List<Subject> loadExampleSubjects() {
 
-        List<Subject> exampleSubjects = exampleSubjectsNames.stream()
-                                                            .map(name -> new Subject(null, name, new HashSet<>()))
-                                                            .toList();
+        List<Subject> subjects = EXAMPLE_SUBJECTS.stream()
+                                                 .map(name -> new Subject(null, name, new HashSet<>()))
+                                                 .toList();
 
-        subjectRepo.saveAll(exampleSubjects);
-        log.info("✅ {} Asignaturas registradas", exampleSubjects.size());
+        List<Subject> savedSubjects = subjectRepo.saveAll(subjects);
+        log.info("✅ {} Asignaturas registradas", savedSubjects.size());
 
+        return savedSubjects;
     }
 
     private void registerTestAdmin() {
         userRepo.save(User.builder()
-                          .username("admin")
-                          .password(passwordEncoder.encode("admin"))
+                          .username(ADMIN_USERNAME)
+                          .password(passwordEncoder.encode(ADMIN_PASSWORD))
                           .name("Administrador Prueba")
                           .email("admin@admin.com")
                           .role(User.Role.ADMIN)
                           .build());
-        log.info("✅ Administrador de prueba registrado con credenciales: admin/admin");
+        log.info("✅ Administrador de prueba registrado con credenciales: {}/{}", ADMIN_USERNAME, ADMIN_PASSWORD);
     }
 
-    private void loadStudentsDumyData(int amount) {
-        List<Student> studentsDummyData = IntStream.rangeClosed(1, amount).mapToObj(i ->
+    private List<Student> loadStudentsDummyData(int amount) {
+        List<Student> studentsDummyData = IntStream.range(0, amount).mapToObj(i ->
                 new Student(
                         null,
-                        faker.regexify("[1-9]{1}[0-9]{7}[0-9kK]{1}"),
+                        generateValidRut(),
                         faker.name().fullName(),
                         faker.address().fullAddress(),
                         new HashSet<>())).toList();
 
 
-        studentRepo.saveAll(studentsDummyData);
-        log.info("✅ {} Estudiantes registrados", studentsDummyData.size());
+        List<Student> savedStudents = studentRepo.saveAll(studentsDummyData);
+        log.info("✅ {} Estudiantes registrados", savedStudents.size());
+
+        return savedStudents;
 
     }
 
-    private void enrollStudentsInRandomSubjects(List<Student> savedStudents, List<Subject> savedSubjects) {
-        savedStudents.forEach(student -> {
+    private void enrollStudentsInRandomSubjects(List<Student> students, List<Subject> subjects) {
+        students.parallelStream().forEach(student -> {
             int numSubjects = random.nextInt(MAX_SUBJECTS_ENROLLED_PER_STUDENT) + 1;
-
-            List<Long> randomSubjectIds = new ArrayList<>();
-            List<Subject> subjectPool = new ArrayList<>(savedSubjects);
-
-            for (int i = 0; i < numSubjects && !subjectPool.isEmpty(); i++) {
-                int randomIndex = random.nextInt(subjectPool.size());
-                randomSubjectIds.add(subjectPool.remove(randomIndex).getId());
-            }
-
+            List<Long> randomSubjectIds = getRandomSubjectIds(subjects, numSubjects);
             enrollmentService.enrollStudentToSubjects(student.getId(), randomSubjectIds);
         });
         log.info("✅ Estudiantes inscritos en asignaturas aleatorias");
+    }
 
+    private List<Long> getRandomSubjectIds(List<Subject> subjects, int count) {
+        List<Subject> subjectsCopy = new ArrayList<>(subjects);
+
+        Collections.shuffle(subjectsCopy, random);
+        return subjectsCopy.stream()
+                           .limit(count)
+                           .map(Subject::getId)
+                           .toList();
+
+    }
+
+    private void logExecutionTime(long start) {
+        double executionTime = (System.currentTimeMillis() - start) / 1000.0;
+        log.info("🎉🎉🎉🎉🎉 Datos de muestra cargados en {} segundos 🎉🎉🎉🎉🎉", executionTime);
+    }
+
+    private String generateValidRut() {
+        return faker.regexify("[1-9]{1}[0-9]{7}[0-9kK]{1}");
     }
 
 
