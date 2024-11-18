@@ -59,8 +59,7 @@ public class AuthenticationService {
 
         User registeredUser = userRepository.save(user);
 
-        String token = jwtService.generateToken(SecurityUser.fromUser(registeredUser));
-        return token;
+        return jwtService.generateToken(SecurityUser.fromUser(registeredUser));
     }
 
     private String generateTokenForExistingUser(AuthenticationRequest request) {
@@ -74,8 +73,7 @@ public class AuthenticationService {
                                   .orElseThrow(() -> new UsernameNotFoundException(
                                           "Usuario no existe: " + request.username()));
 
-        String token = jwtService.generateToken(SecurityUser.fromUser(user));
-        return token;
+        return jwtService.generateToken(SecurityUser.fromUser(user));
     }
 
     private void validateRegistrationRequest(RegistrationRequest request) {
@@ -91,6 +89,4 @@ public class AuthenticationService {
             throw new DomainException(INVALID_DATA, "El correo ya se encuentra registrado");
         }
     }
-
-
 }
