@@ -4,7 +4,6 @@ import dev.cnpe.m6finalsc.application.dto.student.StudentRequest;
 import dev.cnpe.m6finalsc.application.dto.student.StudentResponse;
 import dev.cnpe.m6finalsc.application.dto.student.StudentSearchCriteria;
 import dev.cnpe.m6finalsc.application.service.StudentService;
-import dev.cnpe.m6finalsc.application.service.SubjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,7 +23,6 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 public class StudentController {
 
     private final StudentService studentService;
-    private final SubjectService subjectService;
 
     @GetMapping
     public String searchStudents(@ModelAttribute StudentSearchCriteria searchCriteria,
