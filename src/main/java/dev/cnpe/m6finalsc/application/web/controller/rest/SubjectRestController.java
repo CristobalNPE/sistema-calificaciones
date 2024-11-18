@@ -11,10 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 @RestController
 @RequestMapping("/api/subjects")
@@ -31,10 +32,11 @@ public class SubjectRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> registerSubject(@RequestBody @Valid SubjectRequest subjectRequest,
-                                                UriComponentsBuilder ucb) {
+    public ResponseEntity<Void> registerSubject(@RequestBody @Valid SubjectRequest subjectRequest) {
         Subject subject = subjectService.createSubject(subjectRequest);
-        URI location = ucb.path("/{id}").buildAndExpand(subject.getId()).toUri();
+        URI location = fromCurrentRequest().path("/{id}")
+                                           .buildAndExpand(subject.getId())
+                                           .toUri();
         return ResponseEntity.created(location).build();
     }
 

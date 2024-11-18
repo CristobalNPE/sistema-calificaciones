@@ -11,9 +11,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 @RestController
 @RequestMapping("/api/students")
@@ -39,11 +40,14 @@ public class StudentRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody @Valid StudentRequest studentRequest,
-                                     UriComponentsBuilder ucb) {
+    public ResponseEntity<Void> save(@RequestBody @Valid StudentRequest studentRequest) {
         Student student = studentService.create(studentRequest);
-        URI uri = ucb.path("/{id}").buildAndExpand(student.getId()).toUri();
-        return ResponseEntity.created(uri).build();
+
+        URI location = fromCurrentRequest().path("/{id}")
+                                           .buildAndExpand(student.getId())
+                                           .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
 
